@@ -1,0 +1,15 @@
+.tab-container {
+  display: flex;
+  background: aliceblue; }
+
+.tab-navigation {
+  width: 100%;
+  background: green; }
+
+.tab-nav-button {
+  background: lightgreen; }
+
+.tab-nav-active {
+  background: white; }
+
+/*# sourceMappingURL=Tab.css.map */
