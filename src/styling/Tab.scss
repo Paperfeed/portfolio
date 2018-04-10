@@ -1,16 +1,36 @@
 .tab-container {
-  display: flex;
-  background: aliceblue;
 }
 
 .tab-navigation {
   width: 100%;
-  background: green;
+  background: #2d445d;
+  height: 2rem;
 }
 
 .tab-nav-button {
-  background: lightgreen;
+  border: none;
+  height: 100%;
+  color: white;
+  background: #2d445d;
+  text-transform: uppercase;
+  font-weight: 200;
+  font-family: Roboto, sans-serif;
 }
+
 .tab-nav-active {
+  background: #436488;
+}
+
+.tab-carousel {
+  display: flex;
+  margin: 1rem;
+}
+
+.tab-carousel-slide {
+  flex: 1 0 100%;
   background: white;
+  min-height: 300px;
+  border-radius: 15px;
+  margin-right: 1rem;
+
 }

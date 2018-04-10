@@ -2,94 +2,75 @@ import React, { Component } from 'react';
 import './styling/Tab.css';
 
 class TabContainer extends Component {
+    // Tab properties:
+    // id, order, component
     constructor(props) {
         super(props);
-
-        this.navigator = React.createRef();
-    }
-
-    componentDidMount() {
-        this.createTabs();
-    }
-
-    createTabs() {
-        this.tabComponents = this.props.components.map((data, index) => {
-            this.navigator.current.addTabNav(data[1]);
-            return (<Tab key={index} className={'tab' + index} component={data[0]}/>)
+        const tabs = props.tabs.map((tab, index) => {
+            return({id: tab[1] + index, title: tab[1], index: index, component: tab[0]})
         });
 
-        this.navigator.current.forceUpdate();
+        this.state = {
+            tabs: tabs,
+            position: 0
+        }
     }
 
-    onChangeTab(tab) {
-        this.navigator.current.setState({activeTab: tab});
-        // Change to another tab
+    onChangeTab(e, tab) {
+        this.setState({
+            position: tab.index
+        });
+    }
+
+    getOrder(index, position) {
+        const numItems = this.props.tabs.length || 1;
+
+        if (index - position < 0) {
+            return numItems - Math.abs(index - position)
+        }
+        return index - position
     }
 
     render() {
-        return (
+        return(
             <div className='tab-container'>
-                <TabNavigation ref={this.navigator} activeTab={this.activeTab} onChangeTab={this.onChangeTab.bind(this)}/>
-                {this.tabComponents}
+                <TabNavigation tabs={this.state.tabs} activeTab={this.state.position} handleClick={this.onChangeTab.bind(this)} />
+                <div className='tab-carousel'>
+                    {  this.state.tabs.map((tab, index) => {
+                            const order = this.getOrder(tab.index, this.state.position);
+                            return(
+                                <Tab key={'tab' + index} id={tab.id} order={order} component={tab.component} title={tab.title}/>
+                            )}
+                        )
+                    }
+                </div>
             </div>
         );
     }
 }
 
-class TabNavigation extends Component {
-    constructor(props) {
-        super(props);
-        this.tabs = [];
-
-        this.state = {activeTab: 0}
-    }
-
-    handleClick(id) {
-        this.props.onChangeTab(id);
-    }
-
-    addTabNav(title) {
-        const id = this.tabs.length;
-        console.log('Adding new TABNAV', id);
-
-        this.tabs.push(
-            <button key={title + id}
-                    className={this.state.activeTab === id ? 'tab-nav-button tab-nav-active' : 'tab-nav-button' }
-                    onClick={this.handleClick(id)}>
-                {title}
-            </button>
-        );
-    }
-
-    removeTabNav(tab) {
-        this.tabs.splice(tab);
-    }
-
-    render() {
-        const tabs = this.tabs;
-        console.log(tabs);
-
-        return (
-            <nav className="tab-navigation">
-                {tabs && tabs.map(tab => {return(tab)})}
-            </nav>
-        )
-    }
-}
-/*
+// Navigation bar
 const TabNavigation = (props) => {
-    return (
-        <nav className="tab-navigation">
-            {props.titles.map(title => { return( <button className={'tab-navbutton' } onClick={props.onChangeTab}>{title}</button>) })}
-        </nav>
-    )
-}*/
+    const tabButtons = props.tabs.map(tab => {
 
-const Tab = (props) => {
-    return(
-        <div className='tab' key={props.id}>
-            {props.component}
-        </div>
-    );
+        return <button
+            key={tab.order}
+            className={tab.index === props.activeTab ? 'tab-nav-button tab-nav-active' : 'tab-nav-button'}
+            onClick={(e) => props.handleClick(e, tab)}>
+            {tab.title}
+        </button>
+    });
+
+    return (<nav className="tab-navigation">
+        {tabButtons}
+    </nav>);
 };
+
+// Tab slides
+const Tab = (props) => {
+    return(<div className='tab-carousel-slide' key={props.id} style={{order: props.order}}>
+        {props.component}
+    </div>);
+};
+
 export default TabContainer;
