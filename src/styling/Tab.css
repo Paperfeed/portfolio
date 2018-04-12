@@ -11,6 +11,8 @@
   text-transform: uppercase;
   font-weight: 200;
   font-family: Roboto, sans-serif; }
+  .tab-nav-button:focus {
+    outline: none; }
 
 .tab-nav-active {
   background: #436488; }
@@ -25,5 +27,7 @@
   min-height: 300px;
   border-radius: 15px;
   margin-right: 1rem; }
+  .tab-carousel-slide > div {
+    margin: 1rem; }
 
 /*# sourceMappingURL=Tab.css.map */

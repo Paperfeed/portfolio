@@ -15,6 +15,10 @@
   text-transform: uppercase;
   font-weight: 200;
   font-family: Roboto, sans-serif;
+
+  &:focus {
+    outline: none;
+  }
 }
 
 .tab-nav-active {
@@ -33,4 +37,8 @@
   border-radius: 15px;
   margin-right: 1rem;
 
+  > div {
+    margin: 1rem;
+  }
 }
+

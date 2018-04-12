@@ -1,17 +1,26 @@
 {
-  "name": "aldertvaandering",
+  "name": "portfolio",
   "version": "0.1.0",
   "private": true,
+  "homepage": "http://paperfeed.github.io/portfolio",
   "dependencies": {
+    "gh-pages": "^1.1.0",
+    "image-size-loader": "^0.7.0",
     "react": "^16.3.1",
     "react-dom": "^16.3.1",
+    "react-images": "^0.5.17",
+    "react-measure": "^2.0.2",
+    "react-photo-gallery": "^6.0.22",
     "react-scripts": "1.1.4",
-    "react-swipeable": "^4.2.1"
+    "react-swipeable": "^4.2.1",
+    "react-transition-group": "^2.3.0"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   }
 }
