@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { TransitionGroup, CSSTransition } from 'react-transition-group';
+import NavLink from 'react-router-dom';
 import './styling/Tab.css';
 
 class TabContainer extends Component {
@@ -14,18 +16,28 @@ class TabContainer extends Component {
 
         this.tabs = children.map((tab, index) => {
             const title = tab.props.title;
-            return({id: title + index, title: title, index: index, component: tab})
+            return({id: title + index, title: title, index: index, component: tab, isActive: false})
         });
 
         this.state = {
             position: 0
-        }
+        };
+
+        this.tabs[0].isActive = true;
     }
 
     onChangeTab(e, tab) {
+        this.tabs[this.state.position].isActive = false;
+
         this.setState({
             position: tab.index
         });
+
+        this.tabs[tab.index].isActive = true;
+    }
+
+    changeTabOrder(e) {
+
     }
 
     getOrder(index, position) {
@@ -37,17 +49,28 @@ class TabContainer extends Component {
         return index - position
     }
 
+    /*shouldComponentUpdate() {
+
+    }*/
+
     render() {
         return(
             <div className='tab-container'>
                 <TabNavigation tabs={this.tabs} activeTab={this.state.position} handleClick={this.onChangeTab.bind(this)} />
-                <div className='tab-carousel'>
+                <div className='tab-carousel' >
                     { this.props.children.map((tab, index) => {
                         const order = this.getOrder(index, this.state.position);
+
                         return(
-                            <div className='tab-carousel-slide' key={'tab' + index} style={{order: order}}>
-                                {tab}
-                            </div>
+                            <CSSTransition in={this.tabs[index].isActive}
+                                           timeout={500}
+                                           classNames='tab'
+                                           onExited={ this.changeTabOrder.bind(this) }
+                                           key={'anim' + index}>
+                                <div className='tab-carousel-slide' key={'tab' + index} style={{order: order}}>
+                                    {tab}
+                                </div>
+                            </CSSTransition>
                         )
                     })}
                 </div>
@@ -58,14 +81,17 @@ class TabContainer extends Component {
 
 // Navigation bar
 const TabNavigation = (props) => {
+    console.log(props);
+
     const tabButtons = props.tabs.map(tab => {
 
-        return <button
+        return <NavLink
+            to={"/" + tab.title}
             key={tab.title + 'button' + tab.order}
-            className={tab.index === props.activeTab ? 'tab-nav-button tab-nav-active' : 'tab-nav-button'}
-            onClick={(e) => props.handleClick(e, tab)}>
+            /*className={tab.index === props.activeTab ? 'tab-nav-button tab-nav-active' : 'tab-nav-button'}*/
+            /*onClick={(e) => props.handleClick(e, tab)}*/>
             {tab.title}
-        </button>
+        </NavLink>
     });
 
     return (<nav className="tab-navigation">

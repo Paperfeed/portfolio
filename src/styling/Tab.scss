@@ -5,6 +5,11 @@
   width: 100%;
   background: #2d445d;
   height: 2rem;
+  transition: all;
+  animation: slideInTop 1s;
+  box-shadow: 0 1px 5px 0 rgba(0,0,0,.1);
+  -webkit-font-smoothing: antialiased;
+  z-index: 10;
 }
 
 .tab-nav-button {
@@ -15,6 +20,7 @@
   text-transform: uppercase;
   font-weight: 200;
   font-family: Roboto, sans-serif;
+  transition: all .2s ease-in-out;
 
   &:focus {
     outline: none;
@@ -27,18 +33,59 @@
 
 .tab-carousel {
   display: flex;
+  align-items: flex-start;
   margin: 1rem;
+  transition: all;
+  transform-origin: center;
+  animation: fadeIn 1s;
 }
 
 .tab-carousel-slide {
   flex: 1 0 100%;
+  z-index: 1;
   background: white;
   min-height: 300px;
   border-radius: 15px;
   margin-right: 1rem;
+  box-shadow: 0 1px 5px 0 rgba(0,0,0,.1);
 
   > div {
     margin: 1rem;
   }
 }
 
+.tab-appear {
+  animation: fadeIn 2s;
+}
+
+.tab-enter {
+  animation: slideInTop .5s ease-in-out;
+}
+
+.tab-exit {
+  animation: slideOutRight .5s ease-in-out;
+}
+
+@keyframes slideInTop {
+  0% { transform: translateY(-100%); opacity: 0; }
+}
+
+@keyframes slideOutBottom {
+  0% { transform: translateY(100%); opacity: 0; }
+}
+
+@keyframes slideInLeft {
+  0% { transform: translateX(-100%); opacity: 0; }
+}
+
+@keyframes slideOutRight {
+  100% { transform: translateX(100%); opacity: 0; }
+}
+
+@keyframes fadeIn {
+  0% { opacity: 0; }
+}
+
+@keyframes fadeOut {
+  100% { opacity: 0; }
+}
