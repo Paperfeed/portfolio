@@ -5,6 +5,10 @@ import Lightbox from 'react-images';
 
 import './styling/Gallery.css'
 
+/* This component constructs a gallery (react-photo-gallery) out of the images in the images directory.
+* It will change the amount of columns based on the width of the container (using react-measure)
+* and includes a lightbox from react-images */
+
 class PhotoGallery extends Component {
     constructor(props) {
         super(props);
@@ -20,8 +24,7 @@ class PhotoGallery extends Component {
     }
 
     getAllImages() {
-        //const files = require.context("./images", true, /^\.\/.*\.jpg$/);
-
+        // Use webpack sizeof-loader to obtain imagesize for construction of gallery
         const r = require.context('./images', true, /\.(png|jpe?g|svg)$/);
         const files = r.keys().map(r);
 
@@ -32,6 +35,7 @@ class PhotoGallery extends Component {
 
         return images;
     }
+
     openLightbox(event, obj) {
         this.setState({
             currentImage: obj.index,

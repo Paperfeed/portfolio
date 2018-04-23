@@ -1,77 +1,74 @@
 .tab-navigation {
+  display: flex;
   width: 100%;
+  justify-content: center;
   background: #2d445d;
-  height: 2rem;
   transition: all;
   animation: slideInTop 1s;
-  box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.1);
-  -webkit-font-smoothing: antialiased;
-  z-index: 10; }
+  box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.3);
+  -webkit-font-smoothing: antialiased; }
 
 .tab-nav-button {
   border: none;
-  height: 100%;
+  padding: 0.4rem 1rem;
   color: white;
   background: #2d445d;
   text-transform: uppercase;
   font-weight: 200;
   font-family: Roboto, sans-serif;
-  transition: all .2s ease-in-out; }
+  transition: all .2s ease-in-out;
+  text-decoration: none; }
   .tab-nav-button:focus {
     outline: none; }
-
-.tab-nav-active {
-  background: #436488; }
+  .tab-nav-button.active {
+    background: #436488; }
 
 .tab-carousel {
-  display: flex;
-  align-items: flex-start;
+  display: grid;
+  grid-template-columns: 100%;
+  grid-template-rows: auto;
   margin: 1rem;
-  transition: all;
-  transform-origin: center;
-  animation: fadeIn 1s; }
+  transition: all; }
 
 .tab-carousel-slide {
-  flex: 1 0 100%;
-  z-index: 1;
+  grid-column: 1/span 1;
+  grid-row: 1;
   background: white;
   min-height: 300px;
   border-radius: 15px;
-  margin-right: 1rem;
-  box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.1); }
+  box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.3); }
   .tab-carousel-slide > div {
     margin: 1rem; }
 
+/* Animation CSS */
 .tab-appear {
-  animation: fadeIn 2s; }
+  opacity: 0; }
 
 .tab-enter {
-  animation: slideInTop .5s ease-in-out; }
+  transform: translateX(-80%);
+  opacity: 0;
+  z-index: 10; }
+
+.tab-appear-active,
+.tab-enter-active {
+  transition: all .5s ease-in-out;
+  transform: translateX(0%);
+  opacity: 1;
+  z-index: 10; }
 
 .tab-exit {
-  animation: slideOutRight .5s ease-in-out; }
+  transition: all .5s ease-in-out;
+  transform: translateX(0%);
+  z-index: 1; }
+
+.tab-exit-active {
+  z-index: 1;
+  opacity: 0;
+  transform: translateX(80%); }
 
 @keyframes slideInTop {
   0% {
     transform: translateY(-100%);
-    opacity: 0; } }
-@keyframes slideOutBottom {
-  0% {
-    transform: translateY(100%);
-    opacity: 0; } }
-@keyframes slideInLeft {
-  0% {
-    transform: translateX(-100%);
-    opacity: 0; } }
-@keyframes slideOutRight {
-  100% {
-    transform: translateX(100%);
-    opacity: 0; } }
-@keyframes fadeIn {
-  0% {
-    opacity: 0; } }
-@keyframes fadeOut {
-  100% {
     opacity: 0; } }
 
 /*# sourceMappingURL=Tab.css.map */

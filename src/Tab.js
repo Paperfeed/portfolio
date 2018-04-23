@@ -1,95 +1,76 @@
 import React, { Component } from 'react';
-import { TransitionGroup, CSSTransition } from 'react-transition-group';
-import NavLink from 'react-router-dom';
+import {CSSTransition, TransitionGroup} from 'react-transition-group';
+import {Route, NavLink, Switch} from 'react-router-dom';
 import './styling/Tab.css';
 
+/*
+* This TabContainer component allows you to directly create a tab out of the children components,
+* it will then create a route to these components and dynamically generate a navigation bar for them.
+*
+* It will also apply CSS animations to it. By default the classes applied are:
+* tab-appear, tab-enter, tab-appear-active, tab-enter-active, tab-exit, tab-exit-active, tab-[appear/enter/exit]-done
+*
+* Usage is as simple as:
+* <TabContainer>
+*     <ChildComponent title='Tab1'/>
+*     <AnotherComponent title='Tab2'/>
+*     <Something title='Still a tab'/>
+* </TabContainer>
+*/
 class TabContainer extends Component {
-    // Tab properties:
-    // id, order, component
     constructor(props) {
         super(props);
-        /*const tabs = props.tabs.map((tab, index) => {
-            return({id: tab[1] + index, title: tab[1], index: index, component: tab[0]})
-        });*/
 
         const { children } = this.props;
 
         this.tabs = children.map((tab, index) => {
             const title = tab.props.title;
-            return({id: title + index, title: title, index: index, component: tab, isActive: false})
+            return({id: title + index, title: title, index: index})
         });
-
-        this.state = {
-            position: 0
-        };
-
-        this.tabs[0].isActive = true;
     }
 
-    onChangeTab(e, tab) {
-        this.tabs[this.state.position].isActive = false;
-
-        this.setState({
-            position: tab.index
-        });
-
-        this.tabs[tab.index].isActive = true;
-    }
-
-    changeTabOrder(e) {
-
-    }
-
-    getOrder(index, position) {
-        const numItems = this.tabs.length || 1;
-
-        if (index - position < 0) {
-            return numItems - Math.abs(index - position)
-        }
-        return index - position
-    }
-
-    /*shouldComponentUpdate() {
-
-    }*/
 
     render() {
-        return(
-            <div className='tab-container'>
-                <TabNavigation tabs={this.tabs} activeTab={this.state.position} handleClick={this.onChangeTab.bind(this)} />
-                <div className='tab-carousel' >
-                    { this.props.children.map((tab, index) => {
-                        const order = this.getOrder(index, this.state.position);
 
-                        return(
-                            <CSSTransition in={this.tabs[index].isActive}
-                                           timeout={500}
-                                           classNames='tab'
-                                           onExited={ this.changeTabOrder.bind(this) }
-                                           key={'anim' + index}>
-                                <div className='tab-carousel-slide' key={'tab' + index} style={{order: order}}>
-                                    {tab}
-                                </div>
-                            </CSSTransition>
-                        )
-                    })}
+        return(
+            <Route render={({location}) => (
+                <div className='tab-container'>
+                    <TabNavigation tabs={this.tabs} />
+                    <TransitionGroup className='tab-carousel'>
+                        <CSSTransition key={location.key}
+                                       timeout={500}
+                                       classNames='tab'
+                                       appear
+                        >
+                            <Switch location={location}>
+                                { this.props.children.map((tab, index) => {
+                                    return (
+                                        <Route path={"/" + tab.props.title}
+                                               key={'route' + index}
+                                               render={ () => (
+                                            <div className='tab-carousel-slide' key={'tab' + index}>
+                                                {tab}
+                                            </div>
+                                       )}/>
+                                    )
+                                })}
+                                <Route render={() => <div>Not Found</div>} />
+                            </Switch>
+                        </CSSTransition>
+                    </TransitionGroup>
                 </div>
-            </div>
+            )}/>
         );
     }
 }
 
 // Navigation bar
 const TabNavigation = (props) => {
-    console.log(props);
-
     const tabButtons = props.tabs.map(tab => {
-
         return <NavLink
             to={"/" + tab.title}
             key={tab.title + 'button' + tab.order}
-            /*className={tab.index === props.activeTab ? 'tab-nav-button tab-nav-active' : 'tab-nav-button'}*/
-            /*onClick={(e) => props.handleClick(e, tab)}*/>
+            className={'tab-nav-button'}>
             {tab.title}
         </NavLink>
     });
