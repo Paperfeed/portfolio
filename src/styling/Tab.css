@@ -1,3 +1,6 @@
+.tab-container {
+  height: 100%; }
+
 .tab-navigation {
   display: flex;
   width: 100%;
@@ -23,19 +26,26 @@
   .tab-nav-button.active {
     background: #436488; }
 
+.tab-scroll {
+  height: 100%;
+  width: 100%;
+  overflow: scroll; }
+
 .tab-carousel {
   display: grid;
   grid-template-columns: 100%;
   grid-template-rows: auto;
-  margin: 1rem;
+  margin: 2rem 1rem;
   transition: all; }
 
 .tab-carousel-slide {
   grid-column: 1/span 1;
   grid-row: 1;
+  margin: 0 auto;
+  max-width: 800px;
+  min-width: 500px;
   background: white;
   min-height: 300px;
-  border-radius: 15px;
   box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.3); }
   .tab-carousel-slide > div {
     margin: 1rem; }

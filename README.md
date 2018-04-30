@@ -1624,7 +1624,7 @@ Finally, jsdom is also not needed for [snapshot testing](http://facebook.github.
 
 ### Snapshot Testing
 
-Snapshot testing is a feature of Jest that automatically generates text snapshots of your components and saves them on the disk so if the UI output changes, you get notified without manually writing any assertions on the component output. [Read more about snapshot testing.](http://facebook.github.io/jest/blog/2016/07/27/jest-14.html)
+Snapshot testing is a feature of Jest that automatically generates text snapshots of your components and saves them on the disk so if the LoadingSpinner output changes, you get notified without manually writing any assertions on the component output. [Read more about snapshot testing.](http://facebook.github.io/jest/blog/2016/07/27/jest-14.html)
 
 ### Editor Integration
 
@@ -1693,7 +1693,7 @@ Use the following [`launch.json`](https://code.visualstudio.com/docs/editor/debu
 
 ## Developing Components in Isolation
 
-Usually, in an app, you have a lot of UI components, and each of them has many different states.
+Usually, in an app, you have a lot of LoadingSpinner components, and each of them has many different states.
 For an example, a simple button component could have following states:
 
 * In a regular state, with a text label.
@@ -1706,11 +1706,11 @@ Create React App doesn’t include any tools for this by default, but you can ea
 
 ![Storybook for React Demo](http://i.imgur.com/7CIAWpB.gif)
 
-You can also deploy your Storybook or style guide as a static app. This way, everyone in your team can view and review different states of UI components without starting a backend server or creating an account in your app.
+You can also deploy your Storybook or style guide as a static app. This way, everyone in your team can view and review different states of LoadingSpinner components without starting a backend server or creating an account in your app.
 
 ### Getting Started with Storybook
 
-Storybook is a development environment for React UI components. It allows you to browse a component library, view the different states of each component, and interactively develop and test components.
+Storybook is a development environment for React LoadingSpinner components. It allows you to browse a component library, view the different states of each component, and interactively develop and test components.
 
 First, install the following npm package globally:
 
@@ -1731,7 +1731,7 @@ Learn more about React Storybook:
 * Screencast: [Getting Started with React Storybook](https://egghead.io/lessons/react-getting-started-with-react-storybook)
 * [GitHub Repo](https://github.com/storybooks/storybook)
 * [Documentation](https://storybook.js.org/basics/introduction/)
-* [Snapshot Testing UI](https://github.com/storybooks/storybook/tree/master/addons/storyshots) with Storybook + addon/storyshot
+* [Snapshot Testing LoadingSpinner](https://github.com/storybooks/storybook/tree/master/addons/storyshots) with Storybook + addon/storyshot
 
 ### Getting Started with Styleguidist
 

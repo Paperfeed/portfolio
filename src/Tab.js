@@ -25,7 +25,7 @@ class TabContainer extends Component {
 
         this.tabs = children.map((tab, index) => {
             const title = tab.props.title;
-            return({id: title + index, title: title, index: index})
+            return({id: title + index, title: title, index: index, style: tab.props.style})
         });
     }
 
@@ -36,6 +36,7 @@ class TabContainer extends Component {
             <Route render={({location}) => (
                 <div className='tab-container'>
                     <TabNavigation tabs={this.tabs} />
+                    <div className='tab-scroll'>
                     <TransitionGroup className='tab-carousel'>
                         <CSSTransition key={location.key}
                                        timeout={500}
@@ -45,10 +46,10 @@ class TabContainer extends Component {
                             <Switch location={location}>
                                 { this.props.children.map((tab, index) => {
                                     return (
-                                        <Route path={"/" + tab.props.title}
+                                        <Route path={"/" + tab.props.title + (tab.props.path ? tab.props.path : '')}
                                                key={'route' + index}
                                                render={ () => (
-                                            <div className='tab-carousel-slide' key={'tab' + index}>
+                                            <div className='tab-carousel-slide' style={tab.props.style} key={'tab' + index}>
                                                 {tab}
                                             </div>
                                        )}/>
@@ -58,6 +59,7 @@ class TabContainer extends Component {
                             </Switch>
                         </CSSTransition>
                     </TransitionGroup>
+                    </div>
                 </div>
             )}/>
         );
