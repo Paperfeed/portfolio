@@ -1,7 +1,7 @@
 {
 "version": 3,
-"mappings": "",
-"sources": [],
+"mappings": "AAAA,cAAe;EACb,MAAM,EAAE,IAAI",
+"sources": ["Gallery.scss"],
 "names": [],
 "file": "Gallery.css"
 }

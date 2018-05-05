@@ -57,7 +57,7 @@ class Blog extends Component {
                 <Route path="/blog/:post"
                        render={({match}) => {
                            const post = this.state.posts.find((post) => {
-                               return post.fields.slug !== match.params.post
+                               return post.fields.slug === match.params.post
                            });
 
                            if (post !== undefined) return <BlogPost className="post" {...post.fields}/>;

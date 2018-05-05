@@ -26,6 +26,33 @@ class Portfolio extends Component {
                     })}
                 </div>
                 <div className='projects'>
+                    <h2>LiuChan Chinese Popup Dictionary</h2>
+                    <p>LiuChan (liú chàng) is an extension for chrome that allows you to mouse-over Chinese to
+                        instantly lookup the dictionary.</p>
+                    <p>It started out as a port of RikaiChan (and its Rikai derivatives) and has since grown into an
+                        extension that holds its own with new features and improved performance.</p>
+                    <a className='read-more' href='https://paperfeed.github.io/LiuChan/'>
+                        <p>Read more...</p>
+                    </a>
+
+                    <h2>Nextgen Nivo Slider (Deprecated)</h2>
+                    <p>NextGen NivoSlider allows you to create a NivoSlider as a widget or with a shortcode.
+                        This plugin uses the ‘NextGen Gallery’ plugin to obtain the images using tags or gallery IDs.</p>
+                    <p>NivoSlider is a great responsive image slideshow that is highly customizable. With a large array
+                        of effects and many additional options you are sure to find a combination that will suit your website.</p>
+                    <a className='read-more' href='https://wordpress.org/plugins/nextgen-nivoslider/'>
+                        <p>Read more...</p>
+                    </a>
+
+                    <h2>Awesome TTS (unofficial update)</h2>
+                    <p>A text-to-speech plugin for Anki</p>
+                    <p>This update changed name generation to use MD5 hashing to prevent duplicate file-generation.</p>
+                    <p>It also changed the way files were being pulled from the Google translate services (using urllib2
+                        and cookielib) preventing the user from being banned regularly</p>
+                    <a className='read-more' href='https://github.com/Paperfeed/AwesomeTTS'>
+                        <p>Read more...</p>
+                    </a>
+
 
                 </div>
             </div>
