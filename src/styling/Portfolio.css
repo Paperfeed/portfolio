@@ -6,17 +6,13 @@
   height: 50px;
   border-radius: 100%;
   background: white;
-  transition: all .3s ease-in-out;
-
-  span {
-    display:none;
-  }
-
-  &:hover {
+  transition: all .3s ease-in-out; }
+  .svg-container span {
+    display: none; }
+  .svg-container:hover {
     transition: all .3s ease-in-out;
-    background: #f6f6f6;
-
-    & span {
+    background: #f6f6f6; }
+    .svg-container:hover span {
       display: block;
       float: left;
       position: relative;
@@ -25,10 +21,6 @@
       left: -50%;
       color: black;
       font-family: 'Dosis', sans-serif;
-      text-align: center;
-    }
-  }
-}
+      text-align: center; }
 
-.logos {
-}
+/*# sourceMappingURL=Portfolio.css.map */

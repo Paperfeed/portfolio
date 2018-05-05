@@ -35,7 +35,8 @@ class TabContainer extends Component {
         return(
             <Route render={({location}) => (
                 <div className='tab-container'>
-                    <TabNavigation tabs={this.tabs} />
+                    <img className='tab-background' src={this.props.background} alt=''/>
+                    <TabNavigation tabs={this.tabs} logo={this.props.logo} />
                     <div className='tab-scroll'>
                     <TransitionGroup className='tab-carousel'>
                         <CSSTransition key={location.key}
@@ -78,6 +79,7 @@ const TabNavigation = (props) => {
     });
 
     return (<nav className="tab-navigation">
+        <div className='tab-nav-logo'>{props.logo}</div>
         {tabButtons}
     </nav>);
 };

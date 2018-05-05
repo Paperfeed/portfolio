@@ -31,15 +31,14 @@ class Blog extends Component {
         return this.client.getEntries();
     }
 
-    shouldComponentUpdate() {
+    /*shouldComponentUpdate() {
         return !this.state.isLoading;
-    }
+    }*/
 
     setPosts(posts) {
         this.setState({
             posts: posts.items
         });
-        console.log(posts.items);
     }
 
     async componentDidMount() {
@@ -79,7 +78,6 @@ class Blog extends Component {
 }
 
 const BlogPost = (props) => {
-    console.log(props);
     return <div className="blog-post">
         <Link to={'/blog/' + props.slug} className='blog-post-title'><h1>{props.title}</h1></Link>
         <Author className='blog-post-author' date={props.date} {...props.author}/>
@@ -94,7 +92,7 @@ const Author = (props) => {
         { fields.avatar && <div className='author-avatar'><img src={fields.avatar.fields.file.url} alt='avatar'/></div>}
         <div className='author-name'>{fields.name}</div>
         { fields.summary && <div className='author-summary'>{fields.summary}</div>}
-        { props.date && <div className='post-date'>{props.date}</div> }
+        { props.date && <div className='post-date'>Posted on: {props.date}</div> }
     </div>
 };
 
