@@ -9,7 +9,6 @@ class Blog extends Component {
     constructor(props) {
         super(props);
 
-
         this.state = {
             posts: []
         };
@@ -48,6 +47,7 @@ class Blog extends Component {
         const posts = await this.fetchPosts();
         await this.setPosts(posts);
         await this.setState( { isLoading: false });
+        this.forceUpdate();
     }
 
 

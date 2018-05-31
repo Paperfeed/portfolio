@@ -54,7 +54,7 @@ class TabContainer extends Component {
                 <div className='tab-container'>
                     <img className='tab-background' src={this.props.background} alt=''/>
                     <TabNavigation tabs={this.tabs} logo={this.props.logo} />
-                    <div className='tab-scroll'>
+                    <ScrollToTop location={location}>
                         <TransitionGroup className='tab-carousel'>
                             <CSSTransition key={location.key}
                                            timeout={500}
@@ -86,10 +86,28 @@ class TabContainer extends Component {
                                 </Switch>
                             </CSSTransition>
                         </TransitionGroup>
-                    </div>
+                    </ScrollToTop>
                 </div>
             )}/>
         );
+    }
+}
+
+class ScrollToTop extends Component {
+    constructor(props) {
+        super(props);
+        this.scrollDiv = React.createRef();
+    }
+
+    componentDidUpdate(prevProps) {
+        console.log(prevProps, this.props);
+        if (this.props.location !== prevProps.location) {
+            this.scrollDiv.current.scrollTo(0, 0);
+        }
+    }
+
+    render() {
+        return (<div className='tab-scroll' ref={this.scrollDiv}>{this.props.children}</div>)
     }
 }
 
