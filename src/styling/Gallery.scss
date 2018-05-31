@@ -1,3 +1,22 @@
+@import '_ColorScheme';
+
 .photo-gallery {
   margin: 1rem;
 }
+
+.pagination {
+  background: $main-color;
+}
+
+.page-button {
+  display: inline-block;
+  font-family: $sub-font;
+  margin: 5px;
+  color: white;
+  text-decoration: none;
+
+  &.active {
+    color: $fourth-color;
+  }
+}
+

@@ -26,7 +26,7 @@ class Portfolio extends Component {
                     })}
                 </div>
                 <div className='projects'>
-                    <h2>LiuChan Chinese Popup Dictionary</h2>
+                    <h2>LiuChan Chinese Popup Dictionary <Tag color='#c4e8f3'>JS</Tag><Tag color='#c4e8f3'>Chrome</Tag><Tag color='#c4e8f3'>Plugin</Tag></h2>
                     <p>LiuChan (liú chàng) is an extension for chrome that allows you to mouse-over Chinese to
                         instantly lookup the dictionary.</p>
                     <p>It started out as a port of RikaiChan (and its Rikai derivatives) and has since grown into an
@@ -35,7 +35,7 @@ class Portfolio extends Component {
                         <p>Read more...</p>
                     </a>
 
-                    <h2>Nextgen Nivo Slider (Deprecated)</h2>
+                    <h2>Nextgen Nivo Slider (Deprecated) <Tag color='#c4e8f3'>PHP</Tag><Tag color='#c4e8f3'>Wordpress</Tag><Tag color='#c4e8f3'>Plugin</Tag></h2>
                     <p>NextGen NivoSlider allows you to create a NivoSlider as a widget or with a shortcode.
                         This plugin uses the ‘NextGen Gallery’ plugin to obtain the images using tags or gallery IDs.</p>
                     <p>NivoSlider is a great responsive image slideshow that is highly customizable. With a large array
@@ -44,7 +44,7 @@ class Portfolio extends Component {
                         <p>Read more...</p>
                     </a>
 
-                    <h2>Awesome TTS (unofficial update)</h2>
+                    <h2>Awesome TTS (unofficial update) <Tag color='#c4e8f3'>Python</Tag><Tag color='#c4e8f3'>Plugin</Tag></h2>
                     <p>A text-to-speech plugin for Anki</p>
                     <p>This update changed name generation to use MD5 hashing to prevent duplicate file-generation.</p>
                     <p>It also changed the way files were being pulled from the Google translate services (using urllib2
@@ -59,6 +59,10 @@ class Portfolio extends Component {
         );
     }
 }
+
+const Tag = (props) => {
+    return <span className='tag' style={{background: props.color}}>{props.children}</span>
+};
 
 const Logo = (props) => (
     <div className='svg-container'>

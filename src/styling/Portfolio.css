@@ -36,9 +36,16 @@
     font-weight: 800;
     color: #4173A9; }
 
+.tag {
+  border-radius: 5px;
+  padding: 3px;
+  font-size: 10px;
+  margin: 3px; }
+
 .read-more {
   text-decoration: none;
   text-transform: uppercase;
+  font-family: "Dosis", sans-serif;
   font-weight: 800;
   font-size: 12px;
   color: #d9a23b; }

@@ -20,26 +20,53 @@
   box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.3);
   -webkit-font-smoothing: antialiased; }
 
+.tab-nav-slideout {
+  display: none;
+  cursor: pointer;
+  margin-left: 15px;
+  width: 25px;
+  height: 25px;
+  flex-direction: column;
+  justify-content: space-between;
+  align-self: center; }
+  .tab-nav-slideout i {
+    background-color: #6385A9;
+    border-radius: 2px;
+    content: '';
+    display: block;
+    width: 100%;
+    height: 2px; }
+  .tab-nav-slideout p {
+    margin: .5em;
+    flex-grow: 1; }
+
 .tab-nav-logo {
+  display: inline-flex;
+  width: 100%;
   padding: 0.4rem 1rem;
+  align-items: stretch;
   align-self: center;
   text-transform: uppercase;
   color: #6385A9;
-  font-family: "Bungee", sans-serif;
+  font-size: 1.2em;
+  font-weight: 800;
+  font-family: "Montserrat", sans-serif;
   user-select: none; }
 
 .tab-nav-button {
   border: none;
-  padding: 1.2rem 1rem;
+  padding: 1.1rem 1rem;
   color: #dde3ef;
   text-transform: uppercase;
   font-weight: 200;
   font-family: "Dosis", sans-serif;
   transition: all .2s ease-in-out;
-  text-decoration: none; }
+  text-decoration: none;
+  border-bottom: 2px solid #2d445d; }
   .tab-nav-button:focus {
     outline: none; }
   .tab-nav-button.active {
+    border-bottom: 2px solid #b0c4d9;
     background: #3e5d7f; }
 
 .tab-scroll {
@@ -94,6 +121,27 @@
   opacity: 0;
   transform: translateX(80%); }
 
+@media only screen and (max-width: 768px) {
+  /* For mobile phones: */
+  .tab-navigation {
+    flex-direction: column; }
+
+  .tab-nav-slideout {
+    display: inline-flex; }
+
+  .tab-nav-button {
+    display: none; }
+    .tab-nav-button:checked ~ .tab-nav-button {
+      display: block; }
+
+  .tab-carousel {
+    margin: 2rem 0; }
+
+  .tab-carousel-slide {
+    width: 100%;
+    border-radius: 0;
+    min-width: 0;
+    min-height: 300px; } }
 @keyframes slideInTop {
   0% {
     transform: translateY(-100%);

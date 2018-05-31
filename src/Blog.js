@@ -24,16 +24,18 @@ class Blog extends Component {
                 posts: response.items,
                 isLoading: true
             })
-        }
+        };
+
+        this.path = (this.props.path ? this.props.path : this.props.title);
+    }
+
+    shouldComponentUpdate() {
+        return !this.state.isLoading;
     }
 
     fetchPosts() {
         return this.client.getEntries();
     }
-
-    /*shouldComponentUpdate() {
-        return !this.state.isLoading;
-    }*/
 
     setPosts(posts) {
         this.setState({
@@ -48,27 +50,29 @@ class Blog extends Component {
         await this.setState( { isLoading: false });
     }
 
+
+
     render() {
         const {isLoading} = this.state;
         if (isLoading) return <LoadingSpinner/>;
 
         return(
             <Switch>
-                <Route path="/blog/:post"
+                <Route path={"/" + this.path + "/:post"}
                        render={({match}) => {
                            const post = this.state.posts.find((post) => {
                                return post.fields.slug === match.params.post
                            });
 
-                           if (post !== undefined) return <BlogPost className="post" {...post.fields}/>;
+                           if (post !== undefined) return <BlogPost path={this.path} className="post" {...post.fields}/>;
 
                            return <LoadingSpinner/>;
                        }}
                 />
-                <Route exact path="/blog"
+                <Route exact path={"/" + this.path}
                        render={ () => (
                            this.state.posts.map(({fields}, index) => {
-                               return <BlogPost className="post" key={index} {...fields}/>
+                               return <BlogPost path={this.path} className="post" key={index} {...fields}/>
                            })
                        )}
                 />
@@ -79,7 +83,7 @@ class Blog extends Component {
 
 const BlogPost = (props) => {
     return <div className="blog-post">
-        <Link to={'/blog/' + props.slug} className='blog-post-title'><h1>{props.title}</h1></Link>
+        <Link to={'/' + props.path + '/' + props.slug} className='blog-post-title'><h1>{props.title}</h1></Link>
         <Author className='blog-post-author' date={props.date} {...props.author}/>
         <ReactMarkdown className='blog-post-content' source={props.post}/>
     </div>
