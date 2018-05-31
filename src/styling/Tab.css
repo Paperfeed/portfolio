@@ -3,12 +3,13 @@
 
 .tab-background {
   position: fixed;
-  left: -1%;
-  top: 0;
-  width: 102%;
-  height: 105vh;
+  left: -1.5%;
+  top: -1.5%;
+  width: 103%;
+  height: 103%;
   filter: blur(0.5rem);
-  z-index: -1; }
+  z-index: -1;
+  background-size: cover; }
 
 .tab-navigation {
   display: flex;

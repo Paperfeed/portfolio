@@ -52,7 +52,8 @@ class TabContainer extends Component {
         return(
             <Route render={({location}) => (
                 <div className='tab-container'>
-                    <img className='tab-background' src={this.props.background} alt=''/>
+                    {/*<img className='tab-background' src={this.props.background} alt=''/>*/}
+                    <div className='tab-background' style={{backgroundImage: `url(${this.props.background})`}}/>
                     <TabNavigation tabs={this.tabs} logo={this.props.logo} />
                     <ScrollToTop location={location}>
                         <TransitionGroup className='tab-carousel'>
@@ -100,7 +101,6 @@ class ScrollToTop extends Component {
     }
 
     componentDidUpdate(prevProps) {
-        console.log(prevProps, this.props);
         if (this.props.location !== prevProps.location) {
             this.scrollDiv.current.scrollTo(0, 0);
         }

@@ -25,7 +25,6 @@ class App extends Component {
             <Router>
                 <div className="App">
                     <TabContainer key={'tab-container'} logo='Aldert Vaandering' background={this.getRandomBackground()}>
-                        <div title='About'>About</div>
                         <Blog title='Blog'>Blog</Blog>
                         <PhotoGallery title='Gallery' match='page?' pagination={9} style={{maxWidth: 1200 + 'px'}}/>
                         <Portfolio title='Portfolio'/>
