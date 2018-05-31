@@ -1,22 +1,24 @@
-##Portfolio 
-####by Aldert Vaandering
+## Portfolio 
+#### by Aldert Vaandering
+
+__->[View the live version here](https://www.aldertvaandering.com)<-__
 
 This portfolio makes use of the following organically sourced modules:
 
-* contentful
-* styled-components
-* react-pose
-* react-transition-group
-* react-images
-* react-markdown
-* react-measure
-* react-photo-gallery
+* _contentful_
+* _tyled-components_
+* _react-pose_
+* _react-transition-group_
+* _react-images_
+* _react-markdown_
+* _react-measure_
+* _react-photo-gallery_
 
 and locally produced non-GMO gluten free components:
 
-* TabContainer - Dynamic container with automatic route and nav generation
-* PhotoGallery - Automatically paginated gallery with synchronized lightbox
-* Blog - Powered by Contentful
+* _TabContainer_ - Dynamic container with automatic route and nav generation
+* _PhotoGallery_ - Automatically paginated gallery with synchronized lightbox
+* _Blog_ - Powered by Contentful
 
 
 ## Caution: Work in progress
