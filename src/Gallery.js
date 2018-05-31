@@ -45,7 +45,7 @@ class PhotoGallery extends Component {
 
         return images;
     }
-
+h
     getPaginatedImages(page) {
         const imagesPerPage = this.props.pagination;
         const currentLocation = page * imagesPerPage;
