@@ -1,5 +1,5 @@
 import React from 'react';
-import './styling/LoadingSpinner.css'
+import './LoadingSpinner.css'
 
 const LoadingSpinner = () => (
         <div className="sk-fading-circle">

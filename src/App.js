@@ -1,10 +1,23 @@
 import React, {Component} from 'react';
 import { BrowserRouter as Router } from "react-router-dom";
-import TabContainer from './Tab.js';
-import PhotoGallery from './Gallery.js';
-import Blog from './Blog.js';
-import Portfolio from './Portfolio.js';
+import TabContainer from './components/Tab/Tab.js';
+import PhotoGallery from './scenes/Gallery/Gallery.js';
+import Blog from './scenes/Blog/Blog.js';
+import Portfolio from './scenes/Portfolio/Portfolio.js';
+import {ThemeProvider} from 'styled-components';
 import './styling/App.css';
+
+
+const theme = {
+    mainColor: '#2D445D',
+    secondColor: '#4173A9',
+    thirdColor: '#6385A9',
+    fourthColor: '#d9a23b',
+    fifthColor: '#5D4B2D',
+    titleFont: '\'Montserrat\', sans-serif',
+    subFont: '\'Dosis\', sans-serif',
+    mainFont: '\'Open-Sans\', sans-serif',
+};
 
 class App extends Component {
     getRandomBackground() {
@@ -22,6 +35,7 @@ class App extends Component {
 
     render() {
         return (
+            <ThemeProvider theme={theme}>
             <Router>
                 <div className="App">
                     <TabContainer key={'tab-container'} logo='Aldert Vaandering' background={this.getRandomBackground()}>
@@ -31,6 +45,7 @@ class App extends Component {
                     </TabContainer>
                 </div>
             </Router>
+            </ThemeProvider>
         );
     }
 }

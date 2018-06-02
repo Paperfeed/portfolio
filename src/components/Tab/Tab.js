@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
+import React, { Component, PureComponent } from 'react';
 import {CSSTransition, TransitionGroup} from 'react-transition-group';
 import {Route, Redirect, NavLink, Switch} from 'react-router-dom';
-import './styling/Tab.css';
+import './Tab.css';
 
 /**
  * This TabContainer component allows you to directly create a tab out of the children components,
@@ -52,7 +52,6 @@ class TabContainer extends Component {
         return(
             <Route render={({location}) => (
                 <div className='tab-container'>
-                    {/*<img className='tab-background' src={this.props.background} alt=''/>*/}
                     <div className='tab-background' style={{backgroundImage: `url(${this.props.background})`}}/>
                     <TabNavigation tabs={this.tabs} logo={this.props.logo} />
                     <ScrollToTop location={location}>
@@ -94,7 +93,7 @@ class TabContainer extends Component {
     }
 }
 
-class ScrollToTop extends Component {
+class ScrollToTop extends PureComponent {
     constructor(props) {
         super(props);
         this.scrollDiv = React.createRef();

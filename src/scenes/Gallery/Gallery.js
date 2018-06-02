@@ -2,10 +2,12 @@ import React, {Component} from 'react';
 import Gallery from 'react-photo-gallery';
 import Measure from 'react-measure';
 import Lightbox from 'react-images';
-import { withRouter } from 'react-router'
-import { NavLink } from 'react-router-dom';
+import Photo from './Photo.js';
 
-import './styling/Gallery.css'
+import { withRouter } from 'react-router'
+import PaginatedNav from '../../components/PaginatedNav/PaginatedNav.js'
+
+import './Gallery.css'
 
 /**
  * This component constructs a gallery (react-photo-gallery) out of the images in the images directory.
@@ -21,13 +23,15 @@ class PhotoGallery extends Component {
         this.state = {
             currentImage: 0,
             currentPage: this.props.match.params.page ? (this.props.match.params.page - 1) : 0,
-            width: -1
+            columns: 1,
+            lightboxIsOpen: false
         };
 
         this.closeLightbox = this.closeLightbox.bind(this);
         this.openLightbox = this.openLightbox.bind(this);
         this.gotoNext = this.gotoNext.bind(this);
         this.gotoPrevious = this.gotoPrevious.bind(this);
+        this.checkWidth = this.checkWidth.bind(this);
 
         this.images = this.getAllImages();
         this.path = (this.props.path) ? this.props.path : this.props.title;
@@ -35,17 +39,22 @@ class PhotoGallery extends Component {
 
     getAllImages() {
         // Use webpack sizeof-loader to obtain image size for construction of gallery
-        const r = require.context('./images', true, /\.(png|jpe?g|svg)$/);
+        const r = require.context('../../images', true, /\.(png|jpe?g|svg)$/);
         const files = r.keys().map(r);
 
         let images = [];
         files.forEach((item) => {
-            images.push({src: item.src, height: item.height, width: item.width});
+            images.push({
+                src: item.src,
+                height: item.height,
+                width: item.width,
+                // onLoad: (img) => { img.target.src = item.src}
+            });
         });
 
         return images;
     }
-h
+
     getPaginatedImages(page) {
         const imagesPerPage = this.props.pagination;
         const currentLocation = page * imagesPerPage;
@@ -87,37 +96,31 @@ h
         this.goto(-1);
     }
 
-    render() {
-        const galleryImages = this.getPaginatedImages(this.state.currentPage);
-        const width = this.state.width;
+    checkWidth(contentRect) {
+        const width = contentRect.bounds.width;
 
-        // Create paginated buttons
-        const pagination = [];
-        for (let i = 0, len = (this.images.length / this.props.pagination); i < len; i++) {
-            pagination.push(<NavLink
-                exact={(i===0)}
-                to={'/' + this.path + ((i===0) ? '' : '/' + (i+1))}
-                key={'page' + i}
-                className={'page-button'}>
-                {(i + 1)}
-            </NavLink>);
+        let columns;
+        if (width >= 1824) {
+            columns = 4;
+        } else if (width >= 1024) {
+            columns = 3;
+        } else if (width >= 480) {
+            columns = 2;
+        } else {
+            columns = 1;
         }
 
-        return (
-            <Measure bounds
-                     onResize={(contentRect) => this.setState({width: contentRect.bounds.width})}>
-                { ({measureRef}) => {
-                    let columns;
-                    if (width >= 1824) {
-                        columns = 4;
-                    } else if (width >= 1024) {
-                        columns = 3;
-                    } else if (width >= 480) {
-                        columns = 2;
-                    } else {
-                        columns = 1;
-                    }
+        if (columns !== this.state.columns) this.setState({columns: columns});
+    }
 
+    render() {
+        console.log(this.state);
+        const galleryImages = this.getPaginatedImages(this.state.currentPage);
+        const {columns, currentImage, lightboxIsOpen} = this.state;
+
+        return (
+            <Measure bounds onResize={this.checkWidth}>
+                { ({measureRef}) => {
                     return (
                         <div ref={measureRef} className='photo-gallery'>
                             <Gallery photos={galleryImages} columns={columns} onClick={this.openLightbox}/>
@@ -125,11 +128,11 @@ h
                                       onClose={this.closeLightbox}
                                       onClickPrev={this.gotoPrevious}
                                       onClickNext={this.gotoNext}
-                                      currentImage={this.state.currentImage}
-                                      isOpen={this.state.lightboxIsOpen}
+                                      currentImage={currentImage}
+                                      isOpen={lightboxIsOpen}
                                       backdropClosesModal={true}
                             />
-                            <div className='pagination'>{pagination}</div>
+                            <PaginatedNav length={this.images.length / this.props.pagination} path={this.path} />
                         </div>
                     );
                 }}

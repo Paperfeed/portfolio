@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import './styling/Portfolio.css';
+import './Portfolio.css';
 
 class Portfolio extends Component {
     constructor() {

@@ -1,7 +1,0 @@
-{
-"version": 3,
-"mappings": "AAEA,cAAe;EACb,MAAM,EAAE,IAAI;;AAGd,WAAY;EACV,UAAU,ECPC,OAAO;;ADUpB,YAAa;EACX,OAAO,EAAE,YAAY;EACrB,WAAW,ECLF,mBAAmB;EDM5B,MAAM,EAAE,GAAG;EACX,KAAK,EAAE,KAAK;EACZ,eAAe,EAAE,IAAI;EAErB,mBAAS;IACP,KAAK,ECfM,OAAO",
-"sources": ["Gallery.scss","_ColorScheme.scss"],
-"names": [],
-"file": "Gallery.css"
-}
