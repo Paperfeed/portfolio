@@ -14,6 +14,8 @@ const theme = {
     thirdColor: '#6385A9',
     fourthColor: '#d9a23b',
     fifthColor: '#5D4B2D',
+    tabColor: 'white',
+    tabNavColor: '#dde3ef',
     titleFont: '\'Montserrat\', sans-serif',
     subFont: '\'Dosis\', sans-serif',
     mainFont: '\'Open-Sans\', sans-serif',

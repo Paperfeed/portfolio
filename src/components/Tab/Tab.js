@@ -1,7 +1,10 @@
-import React, { Component, PureComponent } from 'react';
-import {CSSTransition, TransitionGroup} from 'react-transition-group';
-import {Route, Redirect, NavLink, Switch} from 'react-router-dom';
-import './Tab.css';
+import React, {Component} from 'react';
+import {Route, Redirect, Switch, withRouter} from 'react-router-dom';
+import styled from 'styled-components';
+import posed, {PoseGroup} from 'react-pose';
+
+import ScrollToTop from "../ScrollToTop/ScrollToTop";
+import TabNavigation from "./Navigation";
 
 /**
  * This TabContainer component allows you to directly create a tab out of the children components,
@@ -34,6 +37,7 @@ import './Tab.css';
  * </TabContainer>
  *
 **/
+
 class TabContainer extends Component {
     constructor(props) {
         super(props);
@@ -46,89 +50,119 @@ class TabContainer extends Component {
         });
     }
 
+    shouldComponentUpdate(nextProps) {
+        // Don't update if user navigated to same page
+        return this.props.location.pathname !== nextProps.location.pathname;
+    }
 
     render() {
-
         return(
             <Route render={({location}) => (
-                <div className='tab-container'>
-                    <div className='tab-background' style={{backgroundImage: `url(${this.props.background})`}}/>
+                <Container>
+                    <Background style={{backgroundImage: `url(${this.props.background})`}}/>
                     <TabNavigation tabs={this.tabs} logo={this.props.logo} />
                     <ScrollToTop location={location}>
-                        <TransitionGroup className='tab-carousel'>
-                            <CSSTransition key={location.key}
-                                           timeout={500}
-                                           classNames='tab'
-                                           appear
-                            >
-                                <Switch location={location}>
-                                    <Route exact path='/' render={() =>
-                                        <Redirect to={
-                                            this.props.default ? this.props.default : this.props.children[0].props.title
+                        <TabCarousel>
+                            <PoseGroup preEnterPose='preEnter' animateOnMount={true}>
+                                <TabSlide key={location.key}>
+                                    <Switch location={location}>
+                                        <Route exact path='/' render={() =>
+                                            <Redirect to={
+                                                this.props.default ? this.props.default : this.props.children[0].props.title
+                                            }/>
                                         }/>
-                                    }/>
-                                    { this.props.children.map((tab, index) => {
-                                        let path = tab.props.path ? tab.props.path : tab.props.title;
-                                        if (tab.props.match) path += '/:' + tab.props.match;
+                                        { this.props.children.map((tab, index) => {
+                                            let path = tab.props.path ? tab.props.path : tab.props.title;
+                                            if (tab.props.match) path += '/:' + tab.props.match;
 
-                                        return (
-                                            <Route path={"/" + path}
-                                                   key={'route' + index}
-                                                   render={ () => (
-
-                                                <div className='tab-carousel-slide' style={tab.props.style} key={'tab' + index}>
-                                                    {tab}
-                                                </div>
-                                           )}/>
-                                        )
-                                    })}
-                                    <Route render={() => <div className='tab-carousel-slide error'>404 - Not Found</div>} />
-                                </Switch>
-                            </CSSTransition>
-                        </TransitionGroup>
+                                            return (
+                                                <Route path={"/" + path}
+                                                       key={'route' + index}
+                                                       render={ () => (
+                                                           <ContentWrapper style={tab.props.style}>{tab}</ContentWrapper>
+                                               )}/>
+                                            )
+                                        })}
+                                        <Route render={() => <p>404 - Not Found</p>} />
+                                    </Switch>
+                                </TabSlide>
+                            </PoseGroup>
+                        </TabCarousel>
                     </ScrollToTop>
-                </div>
+                </Container>
             )}/>
         );
     }
 }
 
-class ScrollToTop extends PureComponent {
-    constructor(props) {
-        super(props);
-        this.scrollDiv = React.createRef();
+const Container = styled.div`
+    height: 100%;
+`;
+
+const ContentWrapper = styled.div`
+    max-width: 800px;
+`;
+
+const Background = styled.div.attrs({
+    style: props => ({
+            backgroundImage: props.background
+    })
+})`
+    position: fixed;
+    left: -1.5%;
+    top: -1.5%;
+    width: 103%;
+    height: 103%;
+    filter: blur(.5rem);
+    z-index: -1;
+    background-size: cover;
+`;
+
+const TabCarousel = styled.div`
+    margin: 2rem 1rem;
+    padding-bottom: 200px;
+    overflow: hidden;
+    
+    @media only screen and (max-width: 768px) {
+        margin: 2rem 0;
     }
+`;
 
-    componentDidUpdate(prevProps) {
-        if (this.props.location !== prevProps.location) {
-            this.scrollDiv.current.scrollTo(0, 0);
-        }
+const TabSlide = styled(posed.div({
+    preEnter: {
+        opacity: 0,
+        x: '-80%',
+        overflow: 'hidden'
+    },
+    enter: {
+        opacity: 1,
+        x: '0%',
+        overflow: 'hidden',
+        transition: { duration: 350, ease: 'easeInOut' }
+    },
+    exit: {
+        opacity: 0,
+        x: '80%',
+        overflow: 'hidden',
+        transition: { duration: 350, ease: 'easeInOut' }
     }
-
-    render() {
-        return (<div className='tab-scroll' ref={this.scrollDiv}>{this.props.children}</div>)
+}))`
+    margin: 0 auto;
+    padding-top: 1rem;
+    width: fit-content;
+    background: ${props => props.theme.tabColor};
+    min-height: 300px;
+    border-radius: 5px;
+    box-shadow: 0 1px 5px 0 rgba(0,0,0,.3);
+    font-family: 'Open-Sans', sans-serif;
+    color: #1d1d1d;
+    
+    @media only screen and (max-width: 768px) {
+        width: 100%;
+        border-radius: 0;
+        min-width: 0;
+        min-height: 300px;
     }
-}
+`;
 
-// Navigation bar
-const TabNavigation = (props) => {
-    const tabButtons = props.tabs.map(tab => {
-        return <NavLink
-            to={"/" + (tab.path ? tab.path : tab.title)}
-            key={tab.title + 'button' + tab.order}
-            className={'tab-nav-button'}>
-            {tab.title}
-        </NavLink>
-    });
-
-    return (<nav className="tab-navigation">
-
-        <div className='tab-nav-logo'>
-            <div className='tab-nav-slideout'><i/><i/><i/></div>
-            <p>{props.logo}</p>
-        </div>
-        {tabButtons}
-    </nav>);
-};
-
-export default TabContainer;
+export default withRouter(TabContainer);

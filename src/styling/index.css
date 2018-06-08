@@ -1,4 +1,7 @@
 @import url("https://fonts.googleapis.com/css?family=Bungee|Dosis|Open+Sans|Montserrat");
+html {
+  overflow: hidden; }
+
 body {
   margin: 0;
   padding: 0;

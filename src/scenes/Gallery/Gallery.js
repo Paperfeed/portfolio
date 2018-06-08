@@ -1,20 +1,19 @@
 import React, {Component} from 'react';
-import Gallery from 'react-photo-gallery';
-import Measure from 'react-measure';
+import styled from 'styled-components';
 import Lightbox from 'react-images';
 import Photo from './Photo.js';
 
 import { withRouter } from 'react-router'
 import PaginatedNav from '../../components/PaginatedNav/PaginatedNav.js'
 
-import './Gallery.css'
-
 /**
  * This component constructs a gallery (react-photo-gallery) out of the images in the images directory.
  * It will change the amount of columns based on the width of the container (using react-measure)
  * and includes a lightbox from react-images
  *
- * It will also automatically paginate the gallery and synchronize the pages with the user's position in the lightbox
+ * Image index is stored in the data-index attribute and loaded by lightbox on click.
+ *
+ * It will also automatically paginate the gallery and synchronize the pages with the user's position in the lightbox.
 **/
 
 class PhotoGallery extends Component {
@@ -23,15 +22,14 @@ class PhotoGallery extends Component {
         this.state = {
             currentImage: 0,
             currentPage: this.props.match.params.page ? (this.props.match.params.page - 1) : 0,
-            columns: 1,
-            lightboxIsOpen: false
+            lightboxIsOpen: false,
+            columns: 4
         };
 
         this.closeLightbox = this.closeLightbox.bind(this);
         this.openLightbox = this.openLightbox.bind(this);
         this.gotoNext = this.gotoNext.bind(this);
         this.gotoPrevious = this.gotoPrevious.bind(this);
-        this.checkWidth = this.checkWidth.bind(this);
 
         this.images = this.getAllImages();
         this.path = (this.props.path) ? this.props.path : this.props.title;
@@ -61,16 +59,17 @@ class PhotoGallery extends Component {
         return this.images.slice(currentLocation, Math.min(currentLocation + imagesPerPage, this.images.length))
     }
 
-    openLightbox(event, obj) {
+    openLightbox(event) {
         this.setState({
-            currentImage: (this.props.pagination * this.state.currentPage) + obj.index,
+            currentImage: parseInt(event.target.dataset.index, 10),
             lightboxIsOpen: true
         });
     }
 
     closeLightbox() {
         // If user has browsed through images not shown on current page, automatically load the page that image is on
-        if (this.props.match.params.page !== this.state.currentPage) {
+        console.log('Currently on page: ' + this.props.match.params.page, 'Currently stored state page: ' + this.state.currentPage);
+        if ((this.props.match.params.page ? this.props.match.params.page - 1 : 0) !== this.state.currentPage) {
             this.props.history.push('/' + this.path + '/' + (this.state.currentPage + 1));
         }
 
@@ -96,50 +95,57 @@ class PhotoGallery extends Component {
         this.goto(-1);
     }
 
-    checkWidth(contentRect) {
-        const width = contentRect.bounds.width;
-
-        let columns;
-        if (width >= 1824) {
-            columns = 4;
-        } else if (width >= 1024) {
-            columns = 3;
-        } else if (width >= 480) {
-            columns = 2;
-        } else {
-            columns = 1;
-        }
-
-        if (columns !== this.state.columns) this.setState({columns: columns});
-    }
-
     render() {
-        console.log(this.state);
         const galleryImages = this.getPaginatedImages(this.state.currentPage);
-        const {columns, currentImage, lightboxIsOpen} = this.state;
+        const {currentImage, currentPage, lightboxIsOpen} = this.state;
+        const {pagination, columns} = this.props;
 
         return (
-            <Measure bounds onResize={this.checkWidth}>
-                { ({measureRef}) => {
-                    return (
-                        <div ref={measureRef} className='photo-gallery'>
-                            <Gallery photos={galleryImages} columns={columns} onClick={this.openLightbox}/>
-                            <Lightbox images={this.images}
-                                      onClose={this.closeLightbox}
-                                      onClickPrev={this.gotoPrevious}
-                                      onClickNext={this.gotoNext}
-                                      currentImage={currentImage}
-                                      isOpen={lightboxIsOpen}
-                                      backdropClosesModal={true}
+            <GalleryWrapper>
+                <PhotoGrid>
+                    { galleryImages.map((photo, index) => {
+                        return (
+                            <Photo {...photo}
+                                       onClick={this.openLightbox}
+                                       i={index}
+                                       key={index}
+                                       pagination={pagination}
+                                       columns={columns}
+                                       data-index={(currentPage * pagination) + index}
                             />
-                            <PaginatedNav length={this.images.length / this.props.pagination} path={this.path} />
-                        </div>
-                    );
-                }}
-            </Measure>
+                        )
+                    })}
+                </PhotoGrid>
+                <Lightbox images={this.images}
+                          onClose={this.closeLightbox}
+                          onClickPrev={this.gotoPrevious}
+                          onClickNext={this.gotoNext}
+                          currentImage={currentImage}
+                          isOpen={lightboxIsOpen}
+                          backdropClosesModal={true}
+                />
+                <PaginatedNav length={this.images.length / this.props.pagination} path={this.path} />
+            </GalleryWrapper>
         );
     }
 }
+
+const GalleryWrapper = styled.div`
+  margin: 1rem;
+`;
+
+const PhotoGrid = styled.div`
+    display: grid;
+    justify-content: center;
+    grid-auto-flow: dense;
+    grid-template-columns: repeat(12, var(--cellWidth));
+    grid-auto-rows:  var(--cellWidth);
+    background: #222;
+  
+    @media (min-width: 960px) {
+        --cellWidth: 5.3vw;
+    }
+`;
 
 PhotoGallery.defaultProps = {
     pagination: 9

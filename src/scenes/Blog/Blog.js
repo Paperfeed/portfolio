@@ -5,6 +5,8 @@ import {Route, Link, Switch} from 'react-router-dom';
 import LoadingSpinner from '../../components/LoadingSpinner/LoadingSpinner.js';
 
 import './Blog.css';
+import styled, {keyframes} from "styled-components";
+import posed from 'react-pose';
 
 class Blog extends Component {
     constructor(props) {
@@ -75,9 +77,11 @@ class Blog extends Component {
                 />
                 <Route exact path={"/" + this.path}
                        render={ () => (
-                           this.state.posts.map(({fields}, index) => {
-                               return <BlogPost path={this.path} className="post" shortened={true} key={index} {...fields}/>
-                           })
+                           <PoseTest>
+                               { this.state.posts.map(({fields}, index) => {
+                                   return <BlogPost path={this.path} className="post" shortened={true} key={index} {...fields}/>
+                               })}
+                           </PoseTest>
                        )}
                 />
             </Switch>
@@ -85,16 +89,60 @@ class Blog extends Component {
     }
 }
 
+const PoseTest = posed.div({
+    open: {
+        staggerChildren: 500
+    }
+
+});
+const fadeIn = keyframes`
+    0% { opacity: 0; }
+  100% {opacity: 1; }
+`;
+
 const BlogPost = (props) => {
-    return <div className="blog-post">
+    return <StyledBlogPost>
         <Link to={'/' + props.path + '/' + props.slug} className='blog-post-title'><h1>{props.title}</h1></Link>
         <Author className='blog-post-author' date={props.date} {...props.author}/>
         <ReactMarkdown
             className='blog-post-content'
-            source={(props.shortened) ? props.post.slice(0, Math.min(500, props.post.length)) + '...' : props.post}/>
+            source={(props.shortened) ? props.post.slice(0, Math.min(props.summaryLength, props.post.length)) + '...' : props.post}/>
         { props.shortened && <Link to={'/' + props.path + '/' + props.slug} className='read-more'><p>Read more...</p></Link>}
-    </div>
+    </StyledBlogPost>
 };
+
+BlogPost.defaultProps = {
+    summaryLength: 600
+};
+
+const StyledBlogPost = styled(posed.div({
+    visible: {
+        opacity: 1
+    },
+    hidden: {
+        opacity: 0
+    }
+}))`
+    opacity: 0;
+    width: 80%;
+    text-align: left;
+    padding-bottom: 40px;
+    margin: 50px auto 0;
+    border-bottom: 2px solid lightgrey;
+    animation: ${fadeIn} .5s ease-in-out;
+    animation-delay: .5s;
+    animation-fill-mode: forwards;
+    
+    p {
+        margin: 1rem;
+    }
+    
+    img {
+        width: 100%;
+        max-width: max-content;
+    }
+`;
+
 
 const Author = (props) => {
     const {fields} = props;

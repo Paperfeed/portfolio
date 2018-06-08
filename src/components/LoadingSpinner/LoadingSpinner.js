@@ -1,7 +1,10 @@
 import React from 'react';
+import styled from 'styled-components';
+
 import './LoadingSpinner.css'
 
 const LoadingSpinner = () => (
+        <CenterDiv>
         <div className="sk-fading-circle">
             <div className="sk-circle1 sk-circle"/>
             <div className="sk-circle2 sk-circle"/>
@@ -16,6 +19,14 @@ const LoadingSpinner = () => (
             <div className="sk-circle11 sk-circle"/>
             <div className="sk-circle12 sk-circle"/>
         </div>
+        </CenterDiv>
 );
 
+const CenterDiv = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+`;
 export default LoadingSpinner;
