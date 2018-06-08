@@ -14,11 +14,13 @@ const Skeleton = (props) => {
 };
 
 const GradientAnim = keyframes`
-    from { opacity:0; }
-    to { opacity: 1; }
+    from { background-size: 100% 100%}
+    to { background-size: 300% 300% }
 `;
 
-const StyledSkeleton = styled.div`
+const StyledSkeleton = styled.div.attrs({
+    style: props => props.style
+})`
     background:         linear-gradient(135deg, #ffffff, #efefef);
     animation:          ${GradientAnim} 1s ease-in-out infinite;
     animation-direction: alternate;
