@@ -1,29 +1,75 @@
-import React from 'react';
+import React, {Component} from 'react';
 import styled from "styled-components";
+import posed from "react-pose";
 import {NavLink} from "react-router-dom";
 import {lighten} from 'polished';
 import Animations from '../../services/animations';
+import {device} from '../../styling/devices';
+import MediaQueryListener from "../MediaQueryListener/MediaQueryListener";
 
-const TabNavigation = (props) => {
-    const tabButtons = props.tabs.map(tab => {
-        return <NavButton
-            to={"/" + (tab.path ? tab.path : tab.title)}
-            key={tab.title + 'button' + tab.order}
-        >
-            {tab.title}
-        </NavButton>
-    });
+class TabNavigation extends Component {
+    constructor(props) {
+        super();
 
-    return (
-        <NavWrapper>
-            <NavLogo>
-                <div><i/><i/><i/></div>
-                <p>{props.logo}</p>
-            </NavLogo>
-            {tabButtons}
-        </NavWrapper>
-    );
+        this.tabButtons = props.tabs.map(tab => {
+            return <NavButton
+                to={"/" + (tab.path ? tab.path : tab.title)}
+                key={tab.title + 'button' + tab.order}
+            >
+                {tab.title}
+            </NavButton>
+        });
+
+        this.state = {isCollapsed: (props.startCollapsed)}
+    }
+
+    toggleVisibility() {
+        this.setState({isCollapsed: !this.state.isCollapsed});
+        console.log(this.state);
+    }
+
+    render() {
+        return (
+            <NavWrapper>
+                <NavLogo>
+                    <div onClick={this.toggleVisibility.bind(this)}><i/><i/><i/></div>
+                    <p>{this.props.logo}</p>
+                </NavLogo>
+                <MediaQueryListener>
+                    <ButtonWrapper pose={this.state.isCollapsed ? 'hidden' : 'visible'}>
+                        {this.tabButtons}
+                    </ButtonWrapper>
+                </MediaQueryListener>
+            </NavWrapper>
+        );
+    }
+}
+
+TabNavigation.defaultProps = {
+    startCollapsed: true
 };
+
+
+//TODO create collapsible state
+
+const ButtonWrapper = styled(posed.div({
+    visible: {
+        beforeChildren: false,
+        duration: 10000,
+        height: '100',
+        staggerChildren: 100
+    },
+    hidden: {
+        duration: 10000,
+        height: 0
+    }
+}))`
+    display: inline-flex;
+    
+    @media ${device.tablet} {
+        flex-direction: column;
+    }
+`;
 
 const NavWrapper = styled.nav`
     display: flex;
@@ -34,12 +80,22 @@ const NavWrapper = styled.nav`
     box-shadow: 0 1px 5px 0 rgba(0,0,0,.3);
     -webkit-font-smoothing: antialiased;
     
-    @media only screen and (max-width: 768px) {
+    @media ${device.tablet} {
         flex-direction: column;
     }
 `;
 
-const NavButton = styled(NavLink)`
+
+const PosedNavLink = ({hostRef, ...rest}) => <NavLink {...rest} />;
+
+const NavButton = styled(posed(PosedNavLink)({
+    visible: {
+        opacity: 1
+    },
+    hidden: {
+        opacity: 0
+    }
+}))`
     border: none;
     padding: 1.1rem 1rem;
     color: ${props => props.theme.tabNavColor};
@@ -59,8 +115,16 @@ const NavButton = styled(NavLink)`
         background: ${props => lighten(0.1, props.theme.mainColor)};
     }
     
-    @media only screen and (max-width: 768px) {
-        display: none;
+    @media ${device.tablet} {
+        border: 4px solid ${props => props.theme.mainColor};
+        border-top: 0;
+        border-bottom: 0;
+        
+        &.active {
+            border: 4px solid ${props => lighten(0.5, props.theme.mainColor)};
+            border-top: 0;
+            border-bottom: 0;
+        }
     }
 `;
 
@@ -101,7 +165,7 @@ const NavLogo = styled.div`
         }
     }
     
-    @media only screen and (max-width: 769px) {
+    @media ${device.tablet} {
         p {
             margin: .5em;
             flex-grow: 1;

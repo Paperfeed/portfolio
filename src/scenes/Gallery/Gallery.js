@@ -2,9 +2,8 @@ import React, {Component} from 'react';
 import styled from 'styled-components';
 import Lightbox from 'react-images';
 import Photo from './Photo.js';
-
-import { withRouter } from 'react-router'
-import PaginatedNav from '../../components/PaginatedNav/PaginatedNav.js'
+import {withRouter} from 'react-router'
+import PaginatedNav from '../../components/PaginatedNav/PaginatedNav'
 
 /**
  * This component constructs a gallery (react-photo-gallery) out of the images in the images directory.
@@ -46,7 +45,6 @@ class PhotoGallery extends Component {
                 src: item.src,
                 height: item.height,
                 width: item.width,
-                // onLoad: (img) => { img.target.src = item.src}
             });
         });
 
@@ -140,7 +138,7 @@ const PhotoGrid = styled.div`
     grid-auto-flow: dense;
     grid-template-columns: repeat(12, var(--cellWidth));
     grid-auto-rows:  var(--cellWidth);
-    background: #222;
+    background: #f5f5f5;
   
     @media (min-width: 960px) {
         --cellWidth: 5.3vw;

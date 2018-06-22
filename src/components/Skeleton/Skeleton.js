@@ -6,7 +6,7 @@ import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
  * @param {boolean} [useSpinner=false] - Whether or not to display a loading spinner in the center
  *
  * Functional component which returns a skeleton div that animates the entirety of the component it should be replacing
- * Can use useSpinner prop
+ * If useSpinner is true it will display a loading spinner in the center of the element
  */
 
 const Skeleton = (props) => {
