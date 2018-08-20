@@ -15,20 +15,59 @@ import {device} from '../../styling/devices';
         }
  */
 
+const withMediaQueryListener = (WrappedComponent) => {
+    return class extends Component {
+        constructor(props) {
+            super();
+            this.mediaQueries = [];
+            this.state = { device: 'desktop' }
+        }
 
-/*function withMediaQueryListener(WrappedComponent, mediaQuery) {
-    return React.createElement(MediaQueryListener, mediaQuery, WrappedComponent)
-}*/
+        handleQueryChange(device, event) {
+            console.log(device,event);
+            if (event.matches) {
+                this.setState({device});
+
+                this.props.onChange(device);
+            }
+        }
+
+        componentDidMount(){
+            let {device} = this.props;
+            let mediaQueryList, query, hadMatch = false;
+
+            for (query in device) {
+                mediaQueryList = window.matchMedia(device[query]);
+                console.log(mediaQueryList, device[query]);
+                if (!hadMatch && mediaQueryList.matches) {
+                    this.setState({device: query});
+                    hadMatch = true;
+                }
+                this.mediaQueries.push(mediaQueryList);
+                mediaQueryList.addListener(this.handleQueryChange.bind(this, query));
+            }
+        }
+
+        componentWillUnmount() {
+            this.mediaQueries.forEach(query => query.removeListener(this.handleQueryChange));
+        }
+
+        render() {
+            return <WrappedComponent {...this.props} />
+        }
+    };
+};
 
 class MediaQueryListener extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.mediaQueries = [];
 
         this.state = { device: 'desktop'}
     }
 
     handleQueryChange(device, event) {
+        console.log(device, event);
         if (event.matches) {
             this.setState({device});
 
@@ -64,6 +103,9 @@ class MediaQueryListener extends Component {
 }
 
 // Assign default media queries if user doesn't specify their own
-MediaQueryListener.defaultProps = {device};
+withMediaQueryListener.defaultProps = {
+    device,
+    onChange: (e) => (console.log(e))
+};
 
-export default MediaQueryListener;
+export default withMediaQueryListener;

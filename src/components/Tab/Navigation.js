@@ -3,9 +3,11 @@ import styled from "styled-components";
 import posed from "react-pose";
 import {NavLink} from "react-router-dom";
 import {lighten} from 'polished';
+
 import Animations from '../../services/animations';
 import {device} from '../../styling/devices';
-import MediaQueryListener from "../MediaQueryListener/MediaQueryListener";
+import withMediaQueryListener from "../MediaQueryListener/MediaQueryListener";
+import withSmoothScroll from '../SmoothScroll/SmoothScroll';
 
 class TabNavigation extends Component {
     constructor(props) {
@@ -35,11 +37,9 @@ class TabNavigation extends Component {
                     <div onClick={this.toggleVisibility.bind(this)}><i/><i/><i/></div>
                     <p>{this.props.logo}</p>
                 </NavLogo>
-                <MediaQueryListener>
                     <ButtonWrapper pose={this.state.isCollapsed ? 'hidden' : 'visible'}>
                         {this.tabButtons}
                     </ButtonWrapper>
-                </MediaQueryListener>
             </NavWrapper>
         );
     }
@@ -54,14 +54,18 @@ TabNavigation.defaultProps = {
 
 const ButtonWrapper = styled(posed.div({
     visible: {
-        beforeChildren: false,
-        duration: 10000,
-        height: '100',
-        staggerChildren: 100
+        y: '0%',
+        height: 0,
+        staggerChildren: 200,
+        transition: {
+            beforeChildren: false,
+            ease: 'easeIn',
+            duration: 500
+        }
     },
     hidden: {
-        duration: 10000,
-        height: 0
+        y: '-100%',
+        opacity: 0
     }
 }))`
     display: inline-flex;
@@ -71,7 +75,7 @@ const ButtonWrapper = styled(posed.div({
     }
 `;
 
-const NavWrapper = styled.nav`
+const NavWrapper = withMediaQueryListener(styled.nav`
     display: flex;
     width: 100%;
     justify-content: center;
@@ -83,17 +87,19 @@ const NavWrapper = styled.nav`
     @media ${device.tablet} {
         flex-direction: column;
     }
-`;
+`);
 
 
 const PosedNavLink = ({hostRef, ...rest}) => <NavLink {...rest} />;
 
 const NavButton = styled(posed(PosedNavLink)({
     visible: {
-        opacity: 1
+        opacity: 1,
+        y: '0%'
     },
     hidden: {
-        opacity: 0
+        opacity: 0,
+        y: '100%'
     }
 }))`
     border: none;
