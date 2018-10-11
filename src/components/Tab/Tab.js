@@ -15,17 +15,17 @@ import TabNavigation from "./Navigation";
  *
  * Parent Parameters:
  * ----------------------
- * logo: Displays this text/icon as a logo
- * background: sets this image as the background of the container
- * default: sets the default tab to redirect to
+ * @arg {string} logo - Displays this text/icon as a logo
+ * @arg {string} background - sets this image as the background of the container
+ * @arg {string} default - sets the default tab to redirect to
  *
  *
  * Children Parameters:
  * ----------------------
- * title: the title of the tab (will get applied to navigation)
- * style [optional]: custom styling to apply to tab
- * path [optional]: which path to link to, defaults to title
- * match [optional]: id of parameter to match.
+ * @arg {string} title - the title of the tab (will get applied to navigation)
+ * @arg {string} style [optional] - custom styling to apply to tab
+ * @arg {string} path [optional] - which path to link to, defaults to title
+ * @arg {string} match [optional] - id of parameter to match.
  *                   Accessed in the component using match.params.<id> (/: is prefixed automatically)
  *
  *
@@ -40,9 +40,9 @@ import TabNavigation from "./Navigation";
 
 class TabContainer extends Component {
     constructor(props) {
-        super(props);
+        super();
 
-        const { children } = this.props;
+        const { children } = props;
 
         this.tabs = children.map((tab, index) => {
             const title = tab.props.title;
@@ -60,7 +60,7 @@ class TabContainer extends Component {
             <Route render={({location}) => (
                 <Container>
                     <Background style={{backgroundImage: `url(${this.props.background})`}}/>
-                    <TabNavigation tabs={this.tabs} logo={this.props.logo} />
+                    <TabNavigation tabs={this.tabs} logo={this.props.logo}/>
                     <ScrollToTop location={location}>
                         <TabCarousel>
                             <PoseGroup preEnterPose='preEnter' animateOnMount={true}>
@@ -68,7 +68,7 @@ class TabContainer extends Component {
                                     <Switch location={location}>
                                         <Route exact path='/' render={() =>
                                             <Redirect to={
-                                                this.props.default ? this.props.default : this.props.children[0].props.title
+                                                this.props.default ? this.props.default : this.props.children[0].props.title.toLowerCase()
                                             }/>
                                         }/>
                                         { this.props.children.map((tab, index) => {
@@ -83,7 +83,7 @@ class TabContainer extends Component {
                                                )}/>
                                             )
                                         })}
-                                        <Route render={() => <p>404 - Not Found</p>} />
+                                        <Route render={() => <ContentWrapper><NotFound><p>404 - Not Found</p></NotFound></ContentWrapper>} />
                                     </Switch>
                                 </TabSlide>
                             </PoseGroup>
@@ -103,6 +103,10 @@ const ContentWrapper = styled.div`
     max-width: 800px;
 `;
 
+const NotFound = styled.div`
+    margin: 1em;
+`;
+
 const Background = styled.div.attrs({
     style: props => ({
             backgroundImage: props.background
@@ -119,7 +123,7 @@ const Background = styled.div.attrs({
 `;
 
 const TabCarousel = styled.div`
-    margin: 2rem 1rem;
+    margin: 6rem 0;
     padding-bottom: 200px;
     overflow: hidden;
     
@@ -136,6 +140,7 @@ const TabSlide = styled(posed.div({
     },
     enter: {
         opacity: 1,
+        delay: 300,
         x: '0%',
         overflow: 'hidden',
         transition: { duration: 350, ease: 'easeInOut' }

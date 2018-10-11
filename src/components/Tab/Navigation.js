@@ -15,14 +15,16 @@ class TabNavigation extends Component {
 
         this.tabButtons = props.tabs.map(tab => {
             return <NavButton
-                to={"/" + (tab.path ? tab.path : tab.title)}
+                to={"/" + (tab.path ? tab.path : tab.title.toLowerCase())}
                 key={tab.title + 'button' + tab.order}
             >
                 {tab.title}
-            </NavButton>
+            </NavButton>;
         });
 
-        this.state = {isCollapsed: (props.startCollapsed)}
+        this.state = {isCollapsed: (props.startCollapsed)};
+
+        this.onMediaQueryChange = this.onMediaQueryChange.bind(this);
     }
 
     toggleVisibility() {
@@ -30,16 +32,27 @@ class TabNavigation extends Component {
         console.log(this.state);
     }
 
+    onMediaQueryChange(ev) {
+        console.log('OK > qeury change', ev, this.state.isCollapsed);
+        switch (ev) {
+            case 'mobile':
+                this.setState({ isCollapsed: true });
+                break;
+            default:
+                this.setState({ isCollapsed: false });
+        }
+    }
+
     render() {
         return (
-            <NavWrapper>
+            <NavWrapper onChange={this.onMediaQueryChange}>
                 <NavLogo>
                     <div onClick={this.toggleVisibility.bind(this)}><i/><i/><i/></div>
                     <p>{this.props.logo}</p>
                 </NavLogo>
-                    <ButtonWrapper pose={this.state.isCollapsed ? 'hidden' : 'visible'}>
-                        {this.tabButtons}
-                    </ButtonWrapper>
+                <ButtonWrapper pose={this.state.isCollapsed ? 'hidden' : 'visible'}>
+                    {this.tabButtons}
+                </ButtonWrapper>
             </NavWrapper>
         );
     }
@@ -52,10 +65,28 @@ TabNavigation.defaultProps = {
 
 //TODO create collapsible state
 
+const NavWrapper = withMediaQueryListener(styled.nav`
+    position: absolute;
+    z-index:  10;
+    left:     0;
+    right:    0;
+    
+    display: flex;
+    justify-content: center;
+    background: ${props => props.theme.mainColor};
+    animation: ${Animations.slideInTop} 1s;
+    box-shadow: 0 1px 5px 0 rgba(0,0,0,.3);
+    -webkit-font-smoothing: antialiased;
+    
+    @media ${device.tablet} {
+        flex-direction: column;
+    }
+`);
+
 const ButtonWrapper = styled(posed.div({
     visible: {
         y: '0%',
-        height: 0,
+        opacity: 1,
         staggerChildren: 200,
         transition: {
             beforeChildren: false,
@@ -68,38 +99,26 @@ const ButtonWrapper = styled(posed.div({
         opacity: 0
     }
 }))`
-    display: inline-flex;
+    display: flex;
+    background: ${props => props.theme.mainColor};
     
     @media ${device.tablet} {
+        position: absolute;
+        top:      100%;
+        left:     0;
+        right:    0;
         flex-direction: column;
     }
 `;
 
-const NavWrapper = withMediaQueryListener(styled.nav`
-    display: flex;
-    width: 100%;
-    justify-content: center;
-    background: ${props => props.theme.mainColor};
-    animation: ${Animations.slideInTop} 1s;
-    box-shadow: 0 1px 5px 0 rgba(0,0,0,.3);
-    -webkit-font-smoothing: antialiased;
-    
-    @media ${device.tablet} {
-        flex-direction: column;
-    }
-`);
-
-
-const PosedNavLink = ({hostRef, ...rest}) => <NavLink {...rest} />;
+const PosedNavLink = ({hostRef, ...rest}) => <NavLink innerRef={hostRef} {...rest} />;
 
 const NavButton = styled(posed(PosedNavLink)({
     visible: {
-        opacity: 1,
-        y: '0%'
+        opacity: 1
     },
     hidden: {
-        opacity: 0,
-        y: '100%'
+        opacity: 0
     }
 }))`
     border: none;
@@ -152,6 +171,7 @@ const NavLogo = styled.div`
     }
     
     div {
+        z-index: 20;
         display: none;
         cursor: pointer;
         margin-left: 15px;

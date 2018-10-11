@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {device} from '../../styling/devices';
 
 /**
- * @param {object} device - Custom list of queries (along with keys) to listen for
+ * @arg {object} device - Custom list of queries (along with keys) to listen for
  *
  * Keeps track of changes in media queries, saves it as a state and passes it down to its children as a prop
  *
@@ -17,17 +17,20 @@ import {device} from '../../styling/devices';
 
 const withMediaQueryListener = (WrappedComponent) => {
     return class extends Component {
-        constructor(props) {
+        constructor() {
             super();
             this.mediaQueries = [];
-            this.state = { device: 'desktop' }
+            //this.state = { device: 'desktop' };
         }
 
-        handleQueryChange(device, event) {
-            console.log(device,event);
-            if (event.matches) {
-                this.setState({device});
+        static defaultProps = {
+            device,
+            onChange: (e) => (console.log(e))
+        };
 
+        handleQueryChange(device, event) {
+            if (event.matches) {
+                //this.setState({device});
                 this.props.onChange(device);
             }
         }
@@ -38,9 +41,10 @@ const withMediaQueryListener = (WrappedComponent) => {
 
             for (query in device) {
                 mediaQueryList = window.matchMedia(device[query]);
-                console.log(mediaQueryList, device[query]);
+
                 if (!hadMatch && mediaQueryList.matches) {
-                    this.setState({device: query});
+                    //this.setState({device: query});
+                    this.props.onChange(device);
                     hadMatch = true;
                 }
                 this.mediaQueries.push(mediaQueryList);
@@ -53,14 +57,14 @@ const withMediaQueryListener = (WrappedComponent) => {
         }
 
         render() {
-            return <WrappedComponent {...this.props} />
+            return <WrappedComponent device={device} {...this.props} />
         }
     };
 };
 
 class MediaQueryListener extends Component {
-    constructor(props) {
-        super(props);
+    constructor() {
+        super();
         this.mediaQueries = [];
 
         this.state = { device: 'desktop'}
@@ -95,17 +99,17 @@ class MediaQueryListener extends Component {
     }
 
     render() {
-        /*return React.Children.map(this.props.children, (child) => {
-            return React.cloneElement(child, {mediaQueryDevice: this.state.device})
-        })*/
+        // return React.Children.map(this.props.children, (child) => {
+        //     return React.cloneElement(child, {mediaQueryDevice: this.state.device})
+        // })
         return this.props.children;
     }
 }
 
 // Assign default media queries if user doesn't specify their own
-withMediaQueryListener.defaultProps = {
-    device,
-    onChange: (e) => (console.log(e))
-};
+ MediaQueryListener.defaultProps = {
+     device,
+     onChange: (e) => (console.log(e))
+ };
 
 export default withMediaQueryListener;
